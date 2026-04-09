@@ -1,3 +1,4 @@
+"""
 import random
 
 def creer_paquet():
@@ -35,3 +36,16 @@ for j in range(joueurs):
     for carte in main:
         print(" ", carte[1], carte[0])
     print()
+"""
+game_start = True
+card_colors = ["Red", "Green", "Blue", "Yellow"]
+card_values = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+card_specials = ["Skip", "Reverse", "Draw Two", "Wild", "Wild Draw Four"]
+players = None
+
+while game_start:
+    players = int(input("Combien de joueurs? (2-10): "))
+    while players < 2 or players > 10:
+        print("Nombre de joueurs invalide. Veuillez entrer un nombre entre 2 et 10.")
+        players = int(input("Combien de joueurs? (2-10): "))
+    print("Le jeu commence avec", players,"joueurs!")
