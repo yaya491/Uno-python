@@ -38,14 +38,30 @@ for j in range(joueurs):
     print()
 """
 game_start = True
-card_colors = ["Red", "Green", "Blue", "Yellow"]
+card_colors = ["Rouge", "Vert", "Bleu", "Jaune"]
 card_values = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-card_specials = ["Skip", "Reverse", "Draw Two", "Wild", "Wild Draw Four"]
-players = None
+card_specials = ["Passer", "Inverser", "Piocher Deux", "Générique", "Générique Piocher Quatre"]
+players_hand = {}
+
+
+def allcards():
+    all_cards = []
+    for i in range(len(card_colors)):
+        for j in range(len(card_values)):
+            if card_values[j] == "0":
+                all_cards.append("0 " + card_colors[i])
+            else:
+                all_cards.extend([card_values[j] + " " + card_colors[i]] * 2)
+    return all_cards
+print(allcards())
+
 
 while game_start:
-    players = int(input("Combien de joueurs? (2-10): "))
-    while players < 2 or players > 10:
+    count = int(input("combien de joueurs? (2-10): "))
+    while count < 2 or count > 10:
         print("Nombre de joueurs invalide. Veuillez entrer un nombre entre 2 et 10.")
-        players = int(input("Combien de joueurs? (2-10): "))
-    print("Le jeu commence avec", players,"joueurs!")
+        count = int(input("Combien de joueurs? (2-10): "))
+    for i in range(count):
+        players_hand[f"Joueur {i + 1}"] =  []
+    print(players_hand)
+    break
