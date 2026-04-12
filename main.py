@@ -5,7 +5,7 @@ import random  # on importe random pour pouvoir mélanger le paquet avec shuffle
 
 # Répartition du travail :
 #Yannis: creer_paquet, melanger_paquet, distribuer_cartes, afficher_main, carte_jouable, boucle principale du jeu
-# André: creer_joueurs,afficher_carte_du_dessus, joueur_pioche, jouer_tour, verifier_victoire
+#André: creer_joueurs,afficher_carte_du_dessus, joueur_pioche, jouer_tour, verifier_victoire
 
 
 # PARTIE 1 : création et gestion du paquet de cartes (fait par Yannis). On a commencé par cette partie parce que c'est la base du jeu
@@ -23,8 +23,7 @@ def creer_paquet(): #Cette fonction crée toutes les cartes du jeu UNO et les me
         for valeur in valeurs: # on crée toutes les combinaisons couleur / valeur 
             paquet.append((couleur, valeur)) #chaque carte est un TUPLE (couleur, valeur)
 
-            # dans le UNO, toutes les cartes sauf le 0 sont en double
-            # donc si la valeur n'est pas "0", on rajoute une deuxième fois la même carte
+            #dans le UNO, toutes les cartes sauf le 0 sont en double, donc si la valeur n'est pas "0" on rajoute une deuxième fois la même carte
             if valeur != "0":
                 paquet.append((couleur, valeur))  #deuxième exemplaire de la carte
 
@@ -36,7 +35,7 @@ def melanger_paquet(paquet): #Cette fonction mélange le paquet de cartes de man
 
 
 def distribuer_cartes(paquet, nombre_cartes=7):#Cette fonction prend nb_cartes cartes depuis le paquet et les donne à un joueur
-    main = [] #la main du joueur: une liste vide au départ
+    main = [] #la main du joueur:une liste vide au départ
 
     for i in range(nombre_cartes):  #répète nb_cartes le nombre de fois necessaire 
         if len(paquet) > 0:   #on vérifie que le paquet est pas vide avant de piocher
@@ -47,32 +46,28 @@ def distribuer_cartes(paquet, nombre_cartes=7):#Cette fonction prend nb_cartes c
 
 
 
-# PARTIE 2 : création et gestion des joueurs (fait par André)
+#PARTIE 2: création et gestion des joueurs (fait par André)
 
 def creer_joueurs(nb_joueurs, paquet): #Cette fonction crée tous les joueurs et leur distribue leurs cartes. On a utilisé un dictionnaire pour les joueurs comme ca on peut accéder à la main d'un joueur avec son nom directement
- # dictionnaire : clé = nom du joueur et valeur = main du joueur
-    joueurs = {}  # dictionnaire vide qui va se remplir dans la boucle
+ # dictionnaire: clé = nom du joueur et valeur = main du joueur
+    joueurs = {}  #dictionnaire vide qui va se remplir dans la boucle
 
-    for i in range(nb_joueurs):  #on fait ça autant de fois qu'il y a de joueurs
+    for i in range(nb_joueurs): #on fait ça autant de fois qu'il y a de joueurs
         nom = "Joueur " + str(i + 1) #on donne un nom automatique au joueur: "Joueur 1", "Joueur 2"...
-        # str(i + 1) parce que i commence à 0 mais les joueurs commencent à 1
+        #str(i + 1) parce que i commence à 0 mais les joueurs commencent à 1
 
-        # on appelle distribuer_cartes pour donner 7 cartes à ce joueur et on stocke la liste de cartes dans le dictionnaire avec le nom comme clé
+        #on appelle distribuer_cartes pour donner 7 cartes à ce joueur et on stocke la liste de cartes dans le dictionnaire avec le nom comme clé
         joueurs[nom] = distribuer_cartes(paquet)
-
-    return joueurs  #on retourne le dictionnaire avec tous les joueurs et leurs mains
+    return joueurs #on retourne le dictionnaire avec tous les joueurs et leurs mains
 
 
 def afficher_main(nom, main): #Cette fonction affiche les cartes d'un joueur dans la console. On a fait une fonction à part pour ça parce qu'on en a besoin à plusieurs endroits
-   
-
-    print("Main de " + nom + " ---")  # titre avec le nom du joueur
-
+    print("Main de " + nom + " ---") #titre avec le nom du joueur
     for i in range(len(main)): #on parcourt toute les cartes du joueur
         carte = main[i]        #on récupère la carte à la position i
-        # carte[1] c'est la valeur 
-        # carte[0] c'est la couleur 
-        # on affiche "numéro. valeur couleur"
+        #carte[1]c'est la valeur 
+        #carte[0]c'est la couleur 
+        #on affiche "numéro. valeur et couleur" pour toute les cartes du jeu du joueur
         print(str(i + 1) + ". " + carte[1] + " " + carte[0])
 
 
@@ -80,98 +75,82 @@ def afficher_main(nom, main): #Cette fonction affiche les cartes d'un joueur dan
 def afficher_carte_du_dessus(carte):#affiche la carte qui est sur le dessus de la pile de défausse, c'est important car le joueur doit voir cette carte avant de choisir quoi jouer
     print("[Carte du dessus : " + carte[1] + " " + carte[0] + "]")
 
-
 def carte_jouable(carte, carte_dessus):#Cette fonction vérifie si une carte peut être jouée sur la carte du dessus, elle retourne True si c'est jouable, False sinon
-    
-    #Une règles du UNO : on peut jouer une carte si elle a soit la même couleur que la carte du dessus soit la même valeur que la carte du dessus
-
-    
+    #une règles du UNO:on peut jouer une carte si elle a soit la même couleur que la carte du dessus soit la même valeur que la carte du dessus
     if carte[0] == carte_dessus[0]: #carte[0] c'est la couleur, on compare les couleurs
         return True  # même couleur, alors on peut jouer
-
-    # carte[1] c'est la valeur, compare les valeurs
-    if carte[1] == carte_dessus[1]:
-        return True  # même valeur, alors on peut jouer
-
+    if carte[1] == carte_dessus[1]: #carte[1] c'est la valeur, compare les valeurs
+        return True #même valeur, alors on peut jouer
     return False  #si aucune des deux conditions, la carte n'est pas jouable
 
 
-def joueur_pioche(paquet, defausse, main):  #Cette fonction fait piocher une carte au joueur et elle gère aussi le cas où le paquet est vide 
+def joueur_pioche(paquet, defausse, main):  #cette fonction fait piocher une carte au joueur et elle gère aussi le cas où le paquet est vide 
 
-    # si le paquet est vide, on prend la défausse pour reformer un paquet
-    if len(paquet) == 0:
-        print("Le paquet est vide, on remelange la defausse !")  # on garde la dernière carte de la défausse (celle du dessus)
-        derniere = defausse[-1]  # defausse[-1] = dernier élément de la liste
+    if len(paquet) == 0:#si le paquet est vide, on prend la défausse pour reformer un paquet
+        print("Le paquet est vide, on remelange la defausse!")  
+        derniere = defausse[-1]  #on garde la dernière carte de la défausse(celle du dessus): defausse[-1] = dernier élement de la liste
         for carte in defausse[:-1]:
-            paquet.append(carte)  # on remet chaque carte dans le paquet
+            paquet.append(carte)  #on remet chaque carte dans le paquet
+        defausse.clear() #on vide complètement la défausse
+        defausse.append(derniere) #on remet juste la dernière carte sur la défausse
+        melanger_paquet(paquet) #on mélange le nouveau paquet
 
-        defausse.clear()         # on vide complètement la défausse
-        defausse.append(derniere)  # on remet juste la dernière carte sur la défausse
-        melanger_paquet(paquet)  # on mélange le nouveau paquet
-
-    if len(paquet) > 0: # maintenant on vérifie à nouveau si le paquet a des cartes
-        nouvelle_carte = paquet.pop()      # on pioche la carte du dessus
-        main.append(nouvelle_carte)        # on l'ajoutela carte à la main du joueur
-        print("Vous avez pioché : " + nouvelle_carte[1] + " " + nouvelle_carte[0])   # on affiche quelle carte a été piochée
+    if len(paquet) > 0: #maintenant on vérifie encore une fois si le paquet contient des cartes
+        nouvelle_carte = paquet.pop()  #on pioche la carte du dessus
+        main.append(nouvelle_carte)  #on l'ajoutela carte à la main du joueur
+        print("Vous avez pioché : " + nouvelle_carte[1] + " " + nouvelle_carte[0])  #on affiche quelle carte a été piochée
         return nouvelle_carte  
-    else:
-        print("Plus de cartes disponibles !")
-        return None  # on retourne None pour signaler qu'on a rien pu piocher
 
-
-def verifier_victoire(main):# Vérifie si un joueur a gagné, c'est-à-dire s'il n'a plus de cartes
-    return len(main) == 0
+def verifier_victoire(main):#vérifie si un joueur a gagné (s'il n'a plus de cartes)
+    return len(main) == 0 #len(main) donne le nombre de cartes dans la main
 
 
 
-# PARTIE 3 : effets des cartes spéciales 
+#Partie 3: cartes spéciales 
 
-def appliquer_effet(carte, joueurs, ordre, index_courant, paquet, defausse): # Cette fonction applique l'effet d'une carte spéciale
-    valeur = carte[1]  # on récupère la valeur de la carte
+def appliquer_effet(carte, joueurs, ordre, index_courant, paquet, defausse): #cette fonction applique l'effet d'une carte spéciale comme +2, passer ou inverser
+    valeur = carte[1]  #on récupère la valeur de la carte
 
-    noms = list(joueurs.keys())   # on récupère la liste des noms des joueurs depuis le dictionnaire puis on transforme les clés du dictionnaire en liste
-    nb = len(noms)  # nombre total de joueurs, utile pour le modulo juste après
+    noms = list(joueurs.keys()) #on transforme les noms des joueurs (qui sont des clés du dictionnaire) en liste pour pouvoir les parcourir
+    nb = len(noms) #nombre total de joueurs, pour la suite
 
     if valeur == "passer":
-        print("Carte PASSER ! Le joueur suivant passe son tour.")   # pour faire passer un tour on avance l'index d'un joueur de plus
-        index_courant = (index_courant + ordre) % nb   # le % nb (modulo) sert à revenir à 0 quand on dépasse le dernier joueur
-        return index_courant, ordre  # on retourne les deux valeurs modifiées
+        print("Carte PASSER! Le joueur suivant passe son tour.")  #pour faire passer un tour on avance l'index d'un joueur de plus
+        index_courant = (index_courant + ordre) % nb   #le % nb sert à revenir à 0 quand on dépasse le dernier joueur
+        return index_courant, ordre #on retourne les deux valeurs modifiée
 
-    elif valeur == "inverser":
-        print("Carte INVERSER ! Le sens du jeu change.")
-        ordre = ordre * -1    # en multipliant par -1 on change le sens
+    if valeur == "inverser":
+        print("Carte INVERSER! Le sens du jeu change.")
+        ordre= ordre * -1   #en multipliant par -1 on change le sens
         return index_courant, ordre
 
-    elif valeur == "+2":  # le joueur suivant doit piocher 2 cartes et passer son tour
-        # d'abord on calcule quel est le joueur suivant
-        index_suivant = (index_courant + ordre) % nb # On dois dabord calculer quel est le joueur suivant
-        nom_suivant = noms[index_suivant]  # on récupère son nom dans la liste
-        print("Carte +2 ! " + nom_suivant + " doit piocher 2 cartes.")     # on fait piocher 2 cartes au joueur suivant
+    if valeur == "+2": #le joueur suivant doit piocher 2 cartes et passer son tour
+        index_suivant = (index_courant + ordre) % nb #d'abord on calcule quel est le joueur suivant
+        nom_suivant = noms[index_suivant]  #on récupère son nom dans la liste
+        print("Carte +2! " + nom_suivant + " doit piocher 2 cartes.")  #on fait piocher 2 cartes au joueur suivant
 
-        # on appelle joueur_pioche deux fois
+        #on appelle joueur_pioche deux fois
         joueur_pioche(paquet, defausse, joueurs[nom_suivant])
         joueur_pioche(paquet, defausse, joueurs[nom_suivant])
 
-        # le joueur suivant passe aussi son tour
+        #le joueur suivant passe aussi son tour
         index_courant = (index_courant + ordre) % nb
         return index_courant, ordre
-
-    return index_courant, ordre   # si c'est aucune carte spéciale connue, on retourne les valeurs sans les changer
-
+    return index_courant, ordre #si c'est aucune carte spéciale connue,on retourne les valeurs sans les changer
 
 
-# PARTIE 4 : déroulement d'un tour de jeu
 
-def jouer_tour(nom, main, carte_dessus, paquet, defausse):  # C'est la fonction principale pour gérer le tour d'un joueur (alaffichage, le choix de la carte et si on dois piocher ou pas
-    afficher_carte_du_dessus(carte_dessus)  # on montre la carte du dessus avant tout
-    afficher_main(nom, main)               # on affiche les cartes du joueur
+#Partie 4: déroulement d'un tour de jeu
 
-    # on cherche quelles cartes du joueur sont jouables
+def jouer_tour(nom, main, carte_dessus, paquet, defausse): #c'est la fonction principale pour gérer le tour d'un joueur (alaffichage, le choix de la carte et si on dois piocher ou pas
+    afficher_carte_du_dessus(carte_dessus)  #on montre la carte du dessus avant tout
+    afficher_main(nom, main)   #on affiche les cartes du joueur pour qu'il choisisse
+    #on cherche quelles cartes du joueur sont jouables
     # on stocke leurs INDEX dans une liste (pas les cartes elles-mêmes)
     # comme ça on peut retrouver la carte avec main[index] facilement
     cartes_jouables = []  # liste vide au départ
-    for i in range(len(main)):              # on parcourt toutes les cartes de la main
-        if carte_jouable(main[i], carte_dessus):  # si la carte est jouable on ajoute son index à la liste
+    for i in range(len(main)): #on parcourt toutes les cartes de la main
+        if carte_jouable(main[i], carte_dessus): #si la carte est jouable on ajoute son index à la liste
             cartes_jouables.append(i)             
 
     print("\nC'est à vous de jouer, " + nom + " !")
