@@ -38,7 +38,7 @@ def melanger_paquet(paquet): #Cette fonction mélange le paquet de cartes de man
 def distribuer_cartes(paquet, nombre_cartes=7):#Cette fonction prend nb_cartes cartes depuis le paquet et les donne à un joueur
     main = [] #la main du joueur: une liste vide au départ
 
-    for i in range(nb_cartes):  #répète nb_cartes le nombre de fois necessaire 
+    for i in range(nombre_cartes):  #répète nb_cartes le nombre de fois necessaire 
         if len(paquet) > 0:   #on vérifie que le paquet est pas vide avant de piocher
             carte = paquet.pop()  #pop() enlève et retourne la dernière carte du paquet
             main.append(carte)   #ajoute la carte à la main du joueur
@@ -163,7 +163,7 @@ def appliquer_effet(carte, joueurs, ordre, index_courant, paquet, defausse): # C
 # PARTIE 4 : déroulement d'un tour de jeu
 
 def jouer_tour(nom, main, carte_dessus, paquet, defausse):  # C'est la fonction principale pour gérer le tour d'un joueur (alaffichage, le choix de la carte et si on dois piocher ou pas
-     afficher_carte_du_dessus(carte_dessus)  # on montre la carte du dessus avant tout
+    afficher_carte_du_dessus(carte_dessus)  # on montre la carte du dessus avant tout
     afficher_main(nom, main)               # on affiche les cartes du joueur
 
     # on cherche quelles cartes du joueur sont jouables
@@ -178,7 +178,7 @@ def jouer_tour(nom, main, carte_dessus, paquet, defausse):  # C'est la fonction 
 
     if len(cartes_jouables) == 0: # cas où le joueur n'a aucune carte jouable : il doit piocher obligatoirement
         print("Aucune carte jouable. Vous devez piocher.")
-        input("Appuyez sur Entrée pour piocher
+        input("Appuyez sur Entrée pour piocher")
         nouvelle = joueur_pioche(paquet, defausse, main) # on fait piocher une carte
 
         # si la carte piochée est jouable, le joueur peut choisir de la jouer
@@ -199,12 +199,12 @@ def jouer_tour(nom, main, carte_dessus, paquet, defausse):  # C'est la fonction 
             print("  -> " + str(idx + 1) + ". " + main[idx][1] + " " + main[idx][0])  # idx+1 parce que l'affichage commence à 1 mais les index commencent à 0
         # boucle pour demander le choix du joueur jusqu'à ce qu'il entre un choix valide
        
-       while True:
+        while True:
             try: 
                 choix = int(input("Choisissez le numéro de la carte à jouer : "))
                 choix = choix - 1  # on soustrait 1 parce que l'index Python commence à 0
-            
-            if choix in cartes_jouables:  # le choix est valide et la carte est bien jouable
+                
+                if choix in cartes_jouables:  # le choix est valide et la carte est bien jouable
                     carte_choisie = main[choix]  # on récupère la carte choisie
                     main.pop(choix) # on l'enlève de la main (pop avec l'index)
                     defausse.append(carte_choisie)  # on la met sur la pile de défausse
@@ -300,5 +300,3 @@ def lancer_jeu(): # C'est la fonction principale qui lance les parties et fait f
     print(".............................")
 
 lancer_jeu()
-    
-
